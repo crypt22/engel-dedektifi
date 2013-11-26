@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>App Web Client</title>
+
+    <link rel="shortcut icon" href="/s/img/favicon.ico" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="/s/css/app.css?v=1" />
+</head>
+<body>
+
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Engel Evlat Edinme</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="/">Ana Sayfa</a></li>
+                        <li><a href="/problem/new">Engel Ekle</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/user/logout">Çıkış</a></li>
+                    </ul>
+                }
+                else
+                {
+                    if (Request.Path.ToLowerInvariant() == "/user/login")
+                    {
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/user/signup" style="color: red;">Üye Ol</a></li>
+                        </ul>
+                    }
+
+                    if (Request.Path.ToLowerInvariant() == "/user/signup")
+                    {
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/user/login" style="color: red;">Giriş</a></li>
+                        </ul>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <div id="main" class="container">
+
+        <div class="row">
+            @RenderBody()
+        </div>
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+
+    @RenderSection("script", false)
+</body>
+</html>
