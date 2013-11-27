@@ -2,6 +2,10 @@ form .input-group {
     margin: 5px;
 }
 
+#frmProblem .form-control {
+    width: 415px;
+}
+
 .mylabel {
     width: 222px;
     text-align: left;

@@ -10,6 +10,8 @@
     <link rel="shortcut icon" href="/s/img/favicon.ico" />
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css" />
+
+    <link rel="stylesheet" href="/s/css/datepicker.css" />
     <link rel="stylesheet" href="/s/css/app.css?v=1" />
 </head>
 <body>
@@ -20,12 +22,17 @@
                 <a class="navbar-brand" href="#">Engel Evlat Edinme</a>
             </div>
             <div class="navbar-collapse collapse">
+
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/">Ana Sayfa</a></li>
+
+                    <li><a href="/home/about">Nedir?</a></li>
+
+                    <li><a href="/problem/new" style="color: red;">Engel Ekle</a></li>
+                </ul>
+
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="/">Ana Sayfa</a></li>
-                        <li><a href="/problem/new">Engel Ekle</a></li>
-                    </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="/user/logout">Çıkış</a></li>
                     </ul>
@@ -59,6 +66,7 @@
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+    <script src="~/s/js/bootstrap-datepicker.js"></script>
 
     @RenderSection("script", false)
 </body>

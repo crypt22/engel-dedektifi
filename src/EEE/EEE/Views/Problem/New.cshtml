@@ -1,0 +1,76 @@
+﻿@model EEE.Models.ProblemModel
+
+<h3>Engel Dedektifliği 5N1K Kayıt Formu</h3>
+
+<div class="row col-lg-6">
+    <form action="/problem/new" method="post" id="frmProblem">
+
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon mylabel">Ne</span>
+            <input type="text" class="form-control" name="what" id="what" value="@Model.What" />
+        </div>
+
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon mylabel">Ne Zaman</span>
+            <input type="text" class="form-control" name="when" id="when" value="@Model.When" data-date-format="dd-mm-yyyy" />
+        </div>
+
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon mylabel">Nerede</span>
+            <input type="text" class="form-control" name="where" id="where" value="@Model.Where" />
+        </div>
+        
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon mylabel">Neden</span>
+            <select name="why" id="why" class="form-control">
+                <option value="Erişilebilir bir düzenleme yok">Erişilebilir bir düzenleme yok</option>
+                <option value="Standart dışı erişilebilirlik düzenlemesi">Standart dışı erişilebilirlik düzenlemesi</option>
+                <option value="Bozuk/çalıştırılmayan erişilebilirlik düzenlemesi">Bozuk/çalıştırılmayan erişilebilirlik düzenlemesi</option>
+            </select>
+        </div>
+      
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon mylabel">Nasıl</span>
+            <textarea style="height: 150px; width: 415px;" class="form-control" name="how" id="how">@Model.Why</textarea>
+        </div>
+
+        @Html.AntiForgeryToken()
+
+        <div class="row" style="text-align: left;margin-left: 5px;margin-top: 10px;">
+            <input type="submit" value="Kaydet" class="btn btn-primary btn-lg" />
+        </div>
+
+        <div class="error">
+            @Model.Msg
+        </div>
+    </form>
+</div>
+
+
+@section script
+{
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js" type="text/javascript"></script>
+    <script>
+        $(function () {
+
+            $('#when').datepicker();
+
+            $("form").validate({
+                rules: {
+                    what: "required",
+                    when: "required",
+                    where: "required",
+                    why: "required",
+                    how: "required"
+                },
+                messages: {
+                    what: "*",
+                    when: "*",
+                    where: "*",
+                    why: "*",
+                    how: "*"
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,15 @@
+﻿@model EEE.Domain.Entities.Problem
+
+
+@if (Model != null)
+{
+    <h3>@Model.What (#@Model.IdStr)</h3>
+    
+    <div>
+        <strong>@Model.WhoName</strong> tarafından @Model.When tarihinde eklendi.
+        <br />
+        @Model.Where
+        <br />
+        @Model.How
+    </div>
+}
