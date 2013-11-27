@@ -1,3 +1,18 @@
+form .input-group {
+    margin: 5px;
+}
+
+.mylabel {
+    width: 222px;
+    text-align: left;
+}
+
+
+
+footer {
+    margin-top: 122px;
+}
+
 .error {
     color: red;
     padding: 3px;
