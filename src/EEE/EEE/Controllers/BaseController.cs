@@ -11,7 +11,7 @@ namespace EEE.Controllers
 {
     public class BaseController : Controller
     {
-        private readonly IEntityRepository<User> _userRepository;
+        public readonly IEntityRepository<User> _userRepository;
         public readonly IFormsAuthenticationService _formsAuthenticationService;
 
         public BaseController(

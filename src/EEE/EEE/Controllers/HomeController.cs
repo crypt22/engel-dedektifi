@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-
+using EEE.Domain.Entities;
+using EEE.Domain.Repositories;
 using EEE.Domain.Services;
 
 namespace EEE.Controllers
@@ -8,10 +9,11 @@ namespace EEE.Controllers
     public class HomeController : BaseController
     {
         public HomeController(
-            IUserService userService,
+            IEntityRepository<User> userRepository,
             IFormsAuthenticationService formsAuthenticationService)
-            : base(userService, formsAuthenticationService)
+            : base(userRepository, formsAuthenticationService)
         {
+
         }
 
         [HttpGet]

@@ -1,23 +1,25 @@
-﻿using System.Collections.Generic;
-using System.Net.Mime;
+﻿using System.Linq;
 using System.Web.Mvc;
 
-using App.Client.Web.Models;
-using App.Client.Web.Services;
-using App.Domain.Contracts;
+using MongoDB.Bson;
+
+using EEE.Domain.Entities;
+using EEE.Domain.Repositories;
+using EEE.Models;
+using EEE.Domain.Services;
+using EEE.Utils;
+
 
 namespace EEE.Controllers
 {
     public class UserController : BaseController
     {
-        private readonly ICompanyService _companyService;
         public UserController(
-            IUserService userService,
-            IFormsAuthenticationService formsAuthenticationService,
-            ICompanyService companyService)
-            : base(userService, formsAuthenticationService)
+            IEntityRepository<User> userRepository,
+            IFormsAuthenticationService formsAuthenticationService)
+            : base(userRepository, formsAuthenticationService)
         {
-            _companyService = companyService;
+
         }
 
         [HttpGet, AllowAnonymous]
@@ -41,25 +43,20 @@ namespace EEE.Controllers
 
             if (!model.IsValid(model))
             {
-                model.Msg = ViewBag.Txt["FailMsg"];
-                return View(model);
+                ViewBag.Msg = ConstHelper.FailMsg;
+                return View();    
             }
 
-            var userDto = new UserDto
+            var user = _userRepository.AsQueryable().FirstOrDefault(x => x.Email == model.Email && x.PasswordHash != null);
+            if (user != null &&
+                BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
             {
-                Email = model.Email,
-                Password = model.Password
-            };
-
-            if (_userService.Authenticate(userDto))
-            {
-                var user = _userService.GetUserByEmail(model.Email);
-                _formsAuthenticationService.SignIn(user.Id, true);
+                _formsAuthenticationService.SignIn(user.IdStr, true);
                 return RedirectToHome();
             }
 
-            model.Msg = ViewBag.Txt["FailMsg"];
-            return View(model);
+            ViewBag.Msg = ConstHelper.FailMsg;
+            return View();
         }
 
         [HttpGet]
@@ -92,40 +89,38 @@ namespace EEE.Controllers
                 return RedirectToHome();
             }
 
-            if (!model.IsValid(model))
+             if (!model.IsValid(model)
+                || _userRepository.AsQueryable().Any(x => x.Email == model.Email))
             {
-                model.Msg = ViewBag.Txt["FailMsg"];
+                model.Msg = ConstHelper.FailMsg;
                 return View(model);
             }
 
-            var userDto = new UserDto
+            var memberId = ObjectId.GenerateNewId();
+            var img = GravatarHelper.GetGravatarURL(model.Email, 35, "mm");
+
+            var user = new User
             {
-                Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Language = model.Language,
-                Password = model.Password
+                Id = memberId,
+                Email = model.Email.Trim(),
+                Name = model.Name.Trim(),
+                Surname = model.Surname.Trim(),
+                Phone = model.Phone.Trim(),
+                Image = img,
+                CreatedBy = memberId.ToString(),
+                UpdatedBy = memberId.ToString(),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password, BCrypt.Net.BCrypt.GenerateSalt(12))
             };
 
-            var userId = _userService.CreateUser(userDto);
-            if (userId == null)
+            var result = _userRepository.Add(user);
+            if (result.Ok)
             {
-                model.Msg = ViewBag.Txt["FailMsg"];
-                return View(model);
+                _formsAuthenticationService.SignIn(user.IdStr, true);
+                return RedirectToHome();
             }
 
-            var companyDto = new CompanyDto();
-            companyDto.Name = model.CompanyName;
-            companyDto.Url = model.CompanyUrl;
-            companyDto.AdminEmail = model.Email;
-            companyDto.AdminId = userId;
-            companyDto.Language = model.Language;
-            companyDto.CustomFields = new List<CustomFieldDto>();
-
-            _companyService.CreateCompany(companyDto);
-
-            _formsAuthenticationService.SignIn(userId, true);
-            return RedirectToHome();
+            model.Msg =  ConstHelper.FailMsg;
+            return View(model);
         }
     }
 }

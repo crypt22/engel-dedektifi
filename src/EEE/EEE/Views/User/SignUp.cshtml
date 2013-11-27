@@ -1,0 +1,78 @@
+﻿@model EEE.Models.SignupModel
+
+<h3>Engel Dedektifliği Platformuna Kayıt Formu</h3>
+
+<div class="row col-lg-6">
+    <form action="/user/signup" method="post">
+
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon mylabel">Adınız</span>
+            <input type="text" class="form-control" name="name" id="name" value="@Model.Name" />
+        </div>
+
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon mylabel">Soyadınız</span>
+            <input type="text" class="form-control" name="surname" id="surname" value="@Model.Surname" />
+        </div>
+        
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon mylabel">Eposta Adresiniz</span>
+            <input type="text" class="form-control" name="email" id="email" value="@Model.Email" />
+        </div>
+        
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon mylabel">Telefon numaranız</span>
+            <input type="text" class="form-control" name="phone" id="phone" value="@Model.Phone" />
+        </div>
+
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon mylabel">Şifreniz</span>
+            <input type="password" class="form-control" name="password" id="password" />
+        </div>
+
+        @Html.AntiForgeryToken()
+
+        <div class="row" style="text-align: left;margin-left: 5px;margin-top: 10px;">
+            <input type="submit" value="Üye Ol" class="btn btn-primary btn-lg" />
+        </div>
+        
+        <div class="error">
+            @Model.Msg
+        </div>
+    </form>
+</div>
+
+
+@section script
+{
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js" type="text/javascript"></script>
+    <script>
+        $(function () {
+            $("form").validate({
+                rules: {
+                    name: "required",
+                    surname: "required",
+                    phone: "required",
+                    password: {
+                        required: true,
+                        minlength: 5
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    }
+                },
+                messages: {
+                    name: "*",
+                    surname: "*",
+                    phone: "*",
+                    password: {
+                        required: "*",
+                        minlength: "*"
+                    },
+                    email: "*"
+                }
+            });
+        });
+    </script>
+}
