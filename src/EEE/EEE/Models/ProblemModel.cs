@@ -4,6 +4,10 @@ namespace EEE.Models
 {
     public class ProblemModel : BaseModel
     {
+        public string IdStr { get; set; }
+        public string Who { get; set; }
+        public string Status { get; set; }
+
         public string Why { get; set; }
         public string What { get; set; }
         public string When { get; set; }

@@ -1,4 +1,4 @@
-﻿@model EEE.Domain.Entities.Problem
+﻿@model EEE.Models.ProblemModel
 
 
 @if (Model != null)
@@ -6,10 +6,30 @@
     <h3>@Model.What (#@Model.IdStr)</h3>
     
     <div>
-        <strong>@Model.WhoName</strong> tarafından @Model.When tarihinde eklendi.
+        <strong>@Model.Who</strong> tarafından @Model.When tarihinde eklendi.
         <br />
         @Model.Where
         <br />
         @Model.How
     </div>
+    
+    
+     <form action="/problem/status" method="post" id="frmProblem">
+      
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon mylabel">Talep Durum Açıklaması</span>
+            <textarea style="height: 150px; width: 415px;" class="form-control" name="status" id="status">@Model.Status</textarea>
+        </div>
+        
+        @Html.AntiForgeryToken()
+
+        <div class="row" style="text-align: left;margin-left: 5px;margin-top: 10px;">
+            <input type="submit" value="Ekle" class="btn btn-primary btn-lg" />
+        </div>
+
+        <div class="error">
+            @Model.Msg
+        </div>
+    </form>
+    
 }
